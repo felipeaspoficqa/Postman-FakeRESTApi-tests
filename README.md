@@ -3,6 +3,11 @@
 Projeto de portfólio focado em testes de API REST utilizando **Postman** e **JavaScript assertions**, com validação de cenários positivos, negativos, schema validation e documentação de bugs encontrados.
 
 ---
+## 📌 Observação
+
+Durante a execução dos testes, foram identificados comportamentos inesperados na API, principalmente em cenários negativos relacionados à validação de payload e tratamento de IDs inexistentes. Esses casos foram documentados na seção de bugs encontrados.
+
+---
 
 ## 🚀 Objetivo
 
@@ -115,9 +120,3 @@ API retorna status code **200**
 1. Importar a collection no Postman
 2. Configurar as variáveis
 3. Executar os requests manualmente ou via Collection Runner
-
----
-
-## 📌 Observação
-
-Os bugs documentados foram identificados durante a execução dos testes negativos e demonstram capacidade de análise crítica, validação de regras de negócio e documentação de defeitos.
