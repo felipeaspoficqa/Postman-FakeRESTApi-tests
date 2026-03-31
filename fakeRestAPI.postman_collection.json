@@ -1,0 +1,888 @@
+{
+  "info": {
+    "_postman_id": "2726f382-0e93-410c-b31b-19533a130f94",
+    "name": "fakeRestAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "44598867"
+  },
+  "item": [
+    {
+      "name": "Activities",
+      "item": [
+        {
+          "name": "Listar todas as atividades",
+          "item": [
+            {
+              "name": "Happy path - 200",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code é 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar se a resposta é um array de objetos\", function (){pm.expect(pm.response.json()).to.be.an('array');});\r",
+                      "\r",
+                      "var schema = {\r",
+                      "\r",
+                      "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"array\",\r",
+                      "  \"items\": {\r",
+                      "    \"type\": \"object\",\r",
+                      "    \"properties\": {\r",
+                      "      \"id\": {\r",
+                      "        \"type\": \"number\"\r",
+                      "      },\r",
+                      "      \"title\": {\r",
+                      "        \"type\": \"string\"\r",
+                      "      },\r",
+                      "      \"dueDate\": {\r",
+                      "        \"type\": \"string\"\r",
+                      "      },\r",
+                      "      \"completed\": {\r",
+                      "        \"type\": \"boolean\"\r",
+                      "      }\r",
+                      "    },\r",
+                      "    \"required\": [\r",
+                      "      \"id\",\r",
+                      "      \"title\",\r",
+                      "      \"dueDate\",\r",
+                      "      \"completed\"\r",
+                      "    ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "  }\r",
+                      "};\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test('Schema is valid', function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Captura de ID\", function () {\r",
+                      "    var id = pm.response.json()\r",
+                      "    console.log(id[0].id)\r",
+                      "\r",
+                      "    pm.globals.set(\"activitiesId\", id[0].id)\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Método não suportado - 405",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code é 405\", function () {\r",
+                      "    pm.response.to.have.status(405);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Não retorna nenhuma resposta\", function() {\r",
+                      "    pm.expect(pm.response.text()).to.be.empty\r",
+                      "})\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Criar atividade",
+          "item": [
+            {
+              "name": "Happy path - 200",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o id da criação da atividade\", function() {\r",
+                      "    pm.expect(pm.response.json().id).to.be.eql(51)\r",
+                      "    \r",
+                      "    pm.globals.set(\"activityPut\", pm.response.json().id);\r",
+                      "    });\r",
+                      "\r",
+                      "var schema = {\r",
+                      "\r",
+                      "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"object\",\r",
+                      "  \"properties\": {\r",
+                      "    \"id\": {\r",
+                      "      \"type\": \"number\"\r",
+                      "    },\r",
+                      "    \"title\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"dueDate\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"completed\": {\r",
+                      "      \"type\": \"boolean\"\r",
+                      "    }\r",
+                      "  },\r",
+                      "  \"required\": [\r",
+                      "    \"id\",\r",
+                      "    \"title\",\r",
+                      "    \"dueDate\",\r",
+                      "    \"completed\"\r",
+                      "  ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "  };\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "\r",
+                      "pm.test('Schema is valid', function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"id\": 51,\r\n  \"title\": \"testando a criação de uma nova activity\",\r\n  \"dueDate\": \"2026-03-28T17:16:34.694Z\",\r\n  \"completed\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bad request - 400 (X)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () \r",
+                      "{ pm.response.to.have.status(400); });"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Listar atividades por ID",
+          "item": [
+            {
+              "name": "Happy path - 200",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar se o id retornado é o mesmo da variavel\", function () {\r",
+                      "    pm.expect(data.id).to.equal(pm.globals.get(\"activitiesId\"))\r",
+                      "});\r",
+                      "\r",
+                      "var schema = {\r",
+                      "\r",
+                      "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"object\",\r",
+                      "  \"properties\": {\r",
+                      "    \"id\": {\r",
+                      "      \"type\": \"number\"\r",
+                      "    },\r",
+                      "    \"title\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"dueDate\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"completed\": {\r",
+                      "      \"type\": \"boolean\"\r",
+                      "    }\r",
+                      "  },\r",
+                      "  \"required\": [\r",
+                      "    \"id\",\r",
+                      "    \"title\",\r",
+                      "    \"dueDate\",\r",
+                      "    \"completed\"\r",
+                      "  ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "  };\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "\r",
+                      "pm.test('Schema is valid', function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/{{activitiesId}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "{{activitiesId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Método não suportado - 405",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code é 405\", function () {\r",
+                      "    pm.response.to.have.status(405);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Não retorna nenhuma resposta\", function() {\r",
+                      "    pm.expect(pm.response.text()).to.be.empty});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/{{activitiesId}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "{{activitiesId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Id não encontrado - 404",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o título da resposta\", function () {\r",
+                      "    pm.expect(data.title).to.equal(\"Not Found\");\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o status no body é 404\", function () {\r",
+                      "    pm.expect(data.status).to.equal(404);\r",
+                      "});\r",
+                      "\r",
+                      "var schema = {\r",
+                      "      \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"object\",\r",
+                      "  \"properties\": {\r",
+                      "    \"type\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"title\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"status\": {\r",
+                      "      \"type\": \"number\"\r",
+                      "    },\r",
+                      "    \"traceId\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    }\r",
+                      "  },\r",
+                      "  \"required\": [\r",
+                      "    \"type\",\r",
+                      "    \"title\",\r",
+                      "    \"status\",\r",
+                      "    \"traceId\"\r",
+                      "  ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "};\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "pm.test(\"Schema is valid\", function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/0000000000",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "0000000000"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bad request - 400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o status no body é 400\", function () {\r",
+                      "    pm.expect(data.status).to.equal(400);\r",
+                      "});\r",
+                      "\r",
+                      "var schema = {\r",
+                      "    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"object\",\r",
+                      "  \"properties\": {\r",
+                      "    \"type\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"title\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"status\": {\r",
+                      "      \"type\": \"number\"\r",
+                      "    },\r",
+                      "    \"traceId\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"errors\": {\r",
+                      "      \"type\": \"object\",\r",
+                      "      \"properties\": {\r",
+                      "        \"id\": {\r",
+                      "          \"type\": \"array\",\r",
+                      "          \"items\": {\r",
+                      "            \"type\": \"string\"\r",
+                      "          }\r",
+                      "        }\r",
+                      "      },\r",
+                      "      \"required\": [\r",
+                      "        \"id\"\r",
+                      "      ]\r",
+                      "    }\r",
+                      "  },\r",
+                      "  \"required\": [\r",
+                      "    \"type\",\r",
+                      "    \"title\",\r",
+                      "    \"status\",\r",
+                      "    \"traceId\",\r",
+                      "    \"errors\"\r",
+                      "  ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "};\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "pm.test(\"Schema is valid\", function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/abcd",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "abcd"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Atualizar atividade",
+          "item": [
+            {
+              "name": "Happy path - 200",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o status do completed da atividade\", function() {\r",
+                      "    pm.expect(pm.response.json().completed).to.be.eql(true)\r",
+                      "    });\r",
+                      "\r",
+                      "var schema = {\r",
+                      "\r",
+                      "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+                      "  \"title\": \"Generated schema for Root\",\r",
+                      "  \"type\": \"object\",\r",
+                      "  \"properties\": {\r",
+                      "    \"id\": {\r",
+                      "      \"type\": \"number\"\r",
+                      "    },\r",
+                      "    \"title\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"dueDate\": {\r",
+                      "      \"type\": \"string\"\r",
+                      "    },\r",
+                      "    \"completed\": {\r",
+                      "      \"type\": \"boolean\"\r",
+                      "    }\r",
+                      "  },\r",
+                      "  \"required\": [\r",
+                      "    \"id\",\r",
+                      "    \"title\",\r",
+                      "    \"dueDate\",\r",
+                      "    \"completed\"\r",
+                      "  ],\r",
+                      "    \"additionalProperties\": false\r",
+                      "  };\r",
+                      "\r",
+                      "const Ajv = require('ajv');\r",
+                      "const ajv = new Ajv();\r",
+                      "\r",
+                      "\r",
+                      "pm.test('Schema is valid', function () {\r",
+                      "    const valid = ajv.validate(schema, data);\r",
+                      "    pm.expect(valid).to.be.true;\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"id\": {{activityPut}},\r\n  \"title\": \"testando a criação de uma nova activity\",\r\n  \"dueDate\": \"2026-03-28T17:16:34.694Z\",\r\n  \"completed\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/{{activityPut}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "{{activityPut}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bad request - 400 (X)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code é 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/{{activityPut}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "{{activityPut}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Not found - 404 (X)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code é 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"id\": 99999,\r\n  \"title\": \"testando a criação de uma nova activity\",\r\n  \"dueDate\": \"2026-03-28T17:16:34.694Z\",\r\n  \"completed\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/99999",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "99999"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Deletar uma atividade",
+          "item": [
+            {
+              "name": "Happy path - 200",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Response com body vazio\", function () {\r",
+                      "    pm.expect(pm.response.text()).to.be.empty;});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/{{activitiesId}}",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "{{activitiesId}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Not found - 404 (X)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {\r",
+                      "    pm.response.to.have.status(404);\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/99999",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "99999"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Bad request - 400",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const data = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Status code é 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o status no body é 400\", function () {\r",
+                      "    pm.expect(data.status).to.equal(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Validar o título da resposta\", function () {\r",
+                      "    pm.expect(data.title).to.equal(\"One or more validation errors occurred.\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseURL}}/api/v1/Activities/abcd",
+                  "host": [
+                    "{{baseURL}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "Activities",
+                    "abcd"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
