@@ -5,7 +5,9 @@ Projeto de portfólio focado em testes de API REST utilizando **Postman** e **Ja
 ---
 ## 📌 Observação
 
-Durante a execução dos testes, foram identificados comportamentos inesperados na API, principalmente em cenários negativos relacionados à validação de payload e tratamento de IDs inexistentes. Esses casos foram documentados na seção de bugs encontrados.
+Por se tratar de uma API mock/fake utilizada para fins de estudo, alguns cenários mais próximos de um ambiente real não foram contemplados, seja por limitações da própria aplicação ou por não representarem um fluxo funcional relevante dentro do escopo proposto.
+
+O foco deste projeto foi a validação dos principais fluxos CRUD, testes negativos, validação de contratos e identificação de comportamentos inconsistentes da API.
 
 ---
 
